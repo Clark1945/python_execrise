@@ -43,6 +43,8 @@ for user, status in users.copy().items():
     if status == 'inactive':
         del users[user]
 
+print(users)
+
 # Strategy:  Create a new collection
 active_users = {}
 for user, status in users.items():
@@ -77,26 +79,26 @@ def http_error(status):
         case _: # 通用字元，相當於switch case 的 default
             return "Something's wrong with the internet"
 
-# class Point:
-#     def __init__(self, x, y):
-#         self.x = x
-#         self.y = y
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-# def where_is(point):
-#     match point:
-#         case Point(x=0, y=0):
-#             print("Origin")
-#         case Point(x=0, y=y):
-#             print(f"Y={y}")
-#         case Point(x=x, y=0):
-#             print(f"X={x}")
-#         case Point():
-#             print("Somewhere else")
-#         case _:
-#             print("Not a point")
-# where_is(None)
-# where_is(Point(0,1))
-# where_is(Point(3,3))
+def where_is(point):
+    match point:
+        case Point(x=0, y=0):
+            print("Origin")
+        case Point(x=0, y=y):
+            print(f"Y={y}")
+        case Point(x=x, y=0):
+            print(f"X={x}")
+        case Point():
+            print("Somewhere else")
+        case _:
+            print("Not a point")
+where_is(None)
+where_is(Point(0,1))
+where_is(Point(3,3))
 
 class Point:
     __match_args__ = ('x', 'y')
@@ -151,8 +153,7 @@ def fib(n):    # write Fibonacci series less than n
 # 在一個函式被呼叫的時候，實際傳入的參數（引數）會被加入至該函式的區域符號表。因此，引數傳入的方式為傳值呼叫 (call by value)（這裡傳遞的值永遠是一個物件的參照 (reference)，而不是該物件的值）。
 #  [1] 當一個函式呼叫別的函式或遞迴呼叫它自己時，在被呼叫的函式中會建立一個新的區域符號表。
 
-f = bin(100) # 不會被執行
-print(f) # 此時才被執行
+f = fib(100)
 
 i = 5
 def f(arg=i):
@@ -168,7 +169,7 @@ def f(lst=[]):  # 預設參數是一個空列表
 f()  # [1]
 f()  # [1, 1]
 f()  # [1, 1, 1]  (!!!)
-######################################################################## 這段超重要，超危險
+####################################################################### 這段超重要，超危險
 
 def standard_arg(arg): # (Positional-or-Keyword Arguments
     print(arg)
