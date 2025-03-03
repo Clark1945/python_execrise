@@ -136,7 +136,7 @@ def print_color():
         case Color.GREEN:
             print("Grass is green")
         case Color.BLUE:
-            print("I'm feeling the blues :(")
+            print("I'm feeling the blues :")
 
 
 def fib(n):    # write Fibonacci series less than n
@@ -169,7 +169,7 @@ def f(lst=[]):  # 預設參數是一個空列表
 f()  # [1]
 f()  # [1, 1]
 f()  # [1, 1, 1]  (!!!)
-####################################################################### 這段超重要，超危險
+# ####################################################################### 這段超重要，超危險
 
 def standard_arg(arg): # (Positional-or-Keyword Arguments
     print(arg)

@@ -85,9 +85,9 @@ f = fib # 將函式做為變數傳遞
 print(f(10)) 
 print(f(5))
 
-import Chapter1
+# import Chapter1
 # 這並不會將 Chapter1 中定義的函式名稱直接加入當前的 namespace 中（詳情請見 Python 作用域 (Scope) 及命名空間 (Namespace)）；它只會加入 fibo 的模組名稱。
-from Chapter1 import foo as f
+# from Chapter1 import foo as f
 # Import 一個名為 spam 的模組時，直譯器首先會搜尋具有該名稱的內建模組。模組名稱列在 sys.builtin_module_names 當中。如果找不到，接下來會在變數 sys.path 所給定的資料夾清單之中，搜尋一個名為 spam.py 的檔案。sys.path 從這些位置開始進行初始化：
 # 為了加快載入模組的速度，Python 將每個模組的編譯版本暫存在 __pycache__ 資料夾下，並命名為 module.version.pyc， 這裡的 version 是編譯後的檔案的格式名稱，且名稱通常會包含 Python 的版本編號。
 # Import 套件時，Python 會搜尋 sys.path 裡的目錄，尋找套件的子目錄。
@@ -134,19 +134,19 @@ with open('workfile', 'rb') as f:
     print(f.read())
     print(f.read())
 
-# 避免一次讀取造成OOM
-# f.readline() #'This is the first line of the file.\n'
-# f.readline() #'Second line of the file\n'
-# f.readline()
-# for line in f:
-#     print(line, end='')
-# # Python 支援一個普及的資料交換格式，稱為 JSON (JavaScript Object Notation)。標準模組 json 可接收 Python 資料階層，並將它們轉換為字串表示法；這個過程稱為 serializing（序列化）。從字串表示法中重建資料則稱為 deserializing（反序列化）。在序列化和反序列化之間，表示物件的字串可以被儲存在檔案或資料中，或通過網路連接發送到遠端的機器
-# import json
-# x = [1, 'simple', 'list']
-# json.dumps(x) # '[1, "simple", "list"]' #將物件序列化成text file
+避免一次讀取造成OOM
+f.readline() #'This is the first line of the file.\n'
+f.readline() #'Second line of the file\n'
+f.readline()
+for line in f:
+    print(line, end='')
+# Python 支援一個普及的資料交換格式，稱為 JSON (JavaScript Object Notation)。標準模組 json 可接收 Python 資料階層，並將它們轉換為字串表示法；這個過程稱為 serializing（序列化）。從字串表示法中重建資料則稱為 deserializing（反序列化）。在序列化和反序列化之間，表示物件的字串可以被儲存在檔案或資料中，或通過網路連接發送到遠端的機器
+import json
+x = [1, 'simple', 'list']
+json.dumps(x) # '[1, "simple", "list"]' #將物件序列化成text file
 
-# # 若 f 是一個已開啟、可讀取的 binary file 或 text file 物件，要再次解碼物件的話
-# x = json.load(f)
+# 若 f 是一個已開啟、可讀取的 binary file 或 text file 物件，要再次解碼物件的話
+x = json.load(f)
 
 # 8.
 # 常見的（至少）兩種不同的錯誤類別為：語法錯誤 (syntax error) 和例外 (exception)
