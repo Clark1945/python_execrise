@@ -119,7 +119,7 @@ import math
 print('The value of pi is approximately %5.3f.' % math.pi)
 
 #檔案讀寫
-with open('workfile', 'w', encoding="utf-8") as f:
+with open('../workfile', 'w', encoding="utf-8") as f:
     f.write("testing...clark")
 # wb 可以用 byte寫入，使用Byte有以下好處
 # ✅ 適用於 非文字文件
@@ -130,7 +130,7 @@ with open('workfile', 'w', encoding="utf-8") as f:
 # 要讀取檔案的內容，可呼叫 f.read(size)，它可讀取一部份的資料，並以字串（文字模式）或位元組串物件（二進制模式）形式回傳。
 # size 是個選擇性的數字引數。當 size 被省略或為負數時，檔案的全部內容會被讀取並回傳；如果檔案是機器記憶體容量的兩倍大時，這會是你的問題。
 # 否則，最多只有等同於 size 數量的字元（文字模式）或 size 數量的位元組串（二進制模式）會被讀取及回傳。如果之前已經到達檔案的末端，f.read() 會回傳空字串（''）。
-with open('workfile', 'rb') as f:
+with open('../workfile', 'rb') as f:
     print(f.read())
     print(f.read())
 
