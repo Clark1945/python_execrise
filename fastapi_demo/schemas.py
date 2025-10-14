@@ -1,8 +1,7 @@
 import re
 from uuid import UUID
 
-from pydantic import BaseModel, Field
-from pydantic.v1 import validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class UserBase(BaseModel):
@@ -15,15 +14,15 @@ class UserCreate(UserBase):
     username: str
     password: str
     # 驗證 age
-    @validator('age')
-    def validate_age(self, v):
+    @field_validator('age')
+    def validate_age(cls, v):
         if v < 0 or v > 100:
             raise ValueError('年齡必須在 0-100 之間')
         return v
 
     # 驗證 password
-    @validator('password')
-    def validate_password(self, v):
+    @field_validator('password')
+    def validate_password(cls, v):
         if len(v) < 8:
             raise ValueError('密碼至少需要 8 個字元')
 
@@ -50,12 +49,12 @@ class UserUpdate(UserBase):
     age: int
 
 class UserQueryResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
     qry_id: UUID
     name: str
     age: int
     username: str
 
 class UserResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
     qry_id: UUID
-    class Config:
-        orm_mode = True

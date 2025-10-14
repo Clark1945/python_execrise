@@ -5,10 +5,13 @@
 安裝 Postgresql >> `pip install fastapi uvicorn psycopg2-binary sqlalchemy alembic python-dotenv
 `
 
+安裝 測試用套件 >> `pip install pytest httpx`
+
 ### 預計練習項目
 
-- CRUD Rest API
-- JSON API
+- CRUD Rest API ✅
+- JSON API ✅
+- pytest ✅
 - XML API
 - FORM SUBMIT
 - 檔案上傳 API

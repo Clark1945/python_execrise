@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, UTC
 
 from sqlalchemy import Column, Integer, String, CheckConstraint, DateTime, UUID
 
@@ -16,5 +16,5 @@ class User(Base):
     age = Column(Integer, CheckConstraint("age>=0 AND age <= 120"))
     username = Column(String(50), unique=True, index=True) # 帳號 不可重複
     password = Column(String(500)) # 密碼 預設要存加密過後的密碼
-    create_time = Column(DateTime, default=datetime.utcnow())
-    update_time = Column(DateTime, default=datetime.utcnow())
+    create_time = Column(DateTime, default=datetime.now(UTC))
+    update_time = Column(DateTime, default=datetime.now(UTC))
