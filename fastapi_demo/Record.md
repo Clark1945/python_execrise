@@ -5,8 +5,10 @@
 安裝 Postgresql >> `pip install fastapi uvicorn psycopg2-binary sqlalchemy alembic python-dotenv
 `
 
-安裝 測試用套件 >> `pip install pytest httpx`
+安裝 測試用套件 >> `pip install pytest httpx  pytest-cov`
 
+執行測試 >> `pytest`
+執行測試覆蓋率統計 >> `pytest --cov=fastapi_demo`
 ### 預計練習項目
 
 - CRUD Rest API ✅
