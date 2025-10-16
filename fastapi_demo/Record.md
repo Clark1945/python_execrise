@@ -15,14 +15,14 @@
 - JSON API ✅
 - pytest ✅
 - XML API
-- FORM SUBMIT
-- 檔案上傳 API
-- 檔案下載 API
+- FORM SUBMIT ✅
+- JWT Token ✅
+- 檔案上傳 API ✅
+- 檔案下載 API ✅
+- 分頁
+- RPC
 - WebSocket API
 - GraphQL API
-- RPC
-- JWT Token
-- 分頁
 
 ## GPT建議學習項目
 
