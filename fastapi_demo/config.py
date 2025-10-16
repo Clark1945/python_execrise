@@ -1,16 +1,16 @@
-from fastapi_demo.utility import get_env_value
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
+
 
 class Settings(BaseSettings):
     # .env 檔案路徑設定
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding='utf-8')
-     # PostgreSQL
+    # PostgreSQL
     DATABASE_URL: str
-     # MongoDB
+    # MongoDB
     MONGO_URI: str
     DB_NAME: str
-     # MinIO
+    # MinIO
     MINIO_ENDPOINT: str
     MINIO_ACCESS_KEY: str
     MINIO_SECRET_KEY: str
@@ -25,5 +25,6 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings():
     return Settings()
-settings = get_settings()
 
+
+settings = get_settings()
