@@ -1,6 +1,7 @@
 import http
 import io
 
+from bson import ObjectId
 from fastapi import FastAPI, Depends, HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from . import models
 from .auth import create_access_token
 from .midddleware.api_logger import APILoggingMiddleware
 from .minio import BUCKET_NAME, s3_client
+from .mongodb import api_call_log
 from .postgre import engine, verify_password, get_db
 from .routers import users
 
@@ -59,3 +61,20 @@ async def download_file(file_name: str):
         return StreamingResponse(file_obj, media_type="application/octet-stream", headers={"Content-Disposition": f"attachment; filename={file_name}"})
     except Exception as e:
         raise HTTPException(status_code=404, detail="File not found")
+
+# Range-Based Pagination Api Call Log
+@app.get("/logs")
+def get_logs(limit: int = 10, last_id: str = None):
+    query = {}
+    if last_id:
+        query["_id"] = {"$lt": ObjectId(last_id)}
+
+    logs = list(api_call_log.find(query)
+                .sort("_id", -1)
+                .limit(limit))
+    for log in logs:
+        log["_id"] = str(log["_id"])
+    return {
+        "logs": logs,
+        "next_cursor": logs[-1]["_id"] if logs else None
+    }
