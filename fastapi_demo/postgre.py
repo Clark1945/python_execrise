@@ -1,3 +1,4 @@
+from passlib.context import CryptContext
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -16,6 +17,13 @@ engine = create_engine(DATABASE_URL)
 # autoflush=False 決定 SQLAlchemy 是否在查詢前自動將記憶體中的變更「同步」到資料庫(但尚未 commit)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+# 密碼加密
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
 
 # 取得 session 的 dependency
 def get_db():
