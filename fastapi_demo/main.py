@@ -8,6 +8,7 @@ from starlette.responses import StreamingResponse
 
 from . import models
 from .auth import create_access_token
+from .midddleware.api_logger import APILoggingMiddleware
 from .minio import BUCKET_NAME, s3_client
 from .postgre import engine, verify_password, get_db
 from .routers import users
@@ -19,6 +20,9 @@ app = FastAPI()
 
 # 加入 user的router
 app.include_router(users.router)
+
+# 加入 api_call_log的middleware
+app.add_middleware(APILoggingMiddleware)
 
 @app.post("/token")
 def login(db: Session = Depends(get_db),form_data: OAuth2PasswordRequestForm = Depends()):

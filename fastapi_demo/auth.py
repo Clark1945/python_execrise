@@ -1,15 +1,14 @@
-import os
 from datetime import timedelta, datetime
 
-from dotenv import load_dotenv
 from jose import jwt, JWTError
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path=dotenv_path)
+from fastapi_demo.utility import get_env_value
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+#####################################################
+SECRET_KEY = get_env_value("SECRET_KEY")
+ALGORITHM = get_env_value("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = get_env_value("ACCESS_TOKEN_EXPIRE_MINUTES")
+#####################################################
 
 # 產生 Token
 def create_access_token(data: dict, expires_delta: timedelta | None = None):

@@ -1,18 +1,14 @@
-import os
-
-from dotenv import load_dotenv
 import boto3
 from botocore.client import Config
 
+from fastapi_demo.utility import get_env_value
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path=dotenv_path)
-
-MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT")
-MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY")
-MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY")
-BUCKET_NAME = os.getenv("BUCKET_NAME")
-
+#####################################################
+MINIO_ENDPOINT = get_env_value("MINIO_ENDPOINT")
+MINIO_ACCESS_KEY = get_env_value("MINIO_ACCESS_KEY")
+MINIO_SECRET_KEY = get_env_value("MINIO_SECRET_KEY")
+BUCKET_NAME = get_env_value("BUCKET_NAME")
+#####################################################
 
 s3_client = boto3.client(
     "s3",

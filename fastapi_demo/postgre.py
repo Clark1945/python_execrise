@@ -2,13 +2,12 @@ from passlib.context import CryptContext
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path=dotenv_path)
+from fastapi_demo.utility import get_env_value
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+#####################################################
+DATABASE_URL = get_env_value("DATABASE_URL")
+#####################################################
 
 # 建立跟資料庫溝通的核心物件
 engine = create_engine(DATABASE_URL)
