@@ -1,6 +1,7 @@
 import http
 import io
 
+import grpc
 from bson import ObjectId
 from fastapi import FastAPI, Depends, HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
@@ -10,7 +11,7 @@ from starlette.responses import StreamingResponse
 from . import models
 from .auth import create_access_token
 from .config import settings
-from .midddleware.api_logger import APILoggingMiddleware
+from .middleware.api_logger import APILoggingMiddleware
 from .minio import s3_client
 from .mongodb import api_call_log
 from .postgre import engine, verify_password, get_db

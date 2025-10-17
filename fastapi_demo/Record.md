@@ -20,9 +20,10 @@
 - 檔案上傳 API ✅
 - 檔案下載 API ✅
 - 分頁 ✅
-- RPC
+- (RPC)gRPC
+- (RPC)GraphQL
 - WebSocket API
-- GraphQL API
+
 
 ## GPT建議學習項目
 
