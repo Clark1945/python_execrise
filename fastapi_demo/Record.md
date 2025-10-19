@@ -20,7 +20,7 @@
 - 檔案上傳 API ✅
 - 檔案下載 API ✅
 - 分頁 ✅
-- (RPC)gRPC
+- (RPC)gRPC ✅
 - (RPC)GraphQL
 - WebSocket API
 

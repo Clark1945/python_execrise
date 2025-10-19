@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette.responses import StreamingResponse
 
-from . import models
+from . import models, transaction_pb2_grpc, transaction_pb2
 from .auth import create_access_token
 from .config import settings
 from .middleware.api_logger import APILoggingMiddleware
@@ -85,3 +85,19 @@ def get_logs(limit: int = 10, last_id: str = None):
         "logs": logs,
         "next_cursor": logs[-1]["_id"] if logs else None
     }
+
+@app.get("/transaction/{transaction_id}")
+def get_transaction(transaction_id: int):
+    # 建立一個到 gRPC server 的「channel」（通道）連線
+    # insecure_channel 表示不使用 TLS/SSL（明文）。
+    # with 區塊確保在區塊結束時自動關閉 channel（釋放資源）。
+    with grpc.insecure_channel("localhost:50051") as channel:
+        # 使用由 protoc 生成的 gRPC client 類別 TransactionServiceStub。
+        # stub 是一個本地的 client 物件，用來呼叫遠端 gRPC 服務的方法（像 RPC 的 proxy）。
+        stub = transaction_pb2_grpc.TransactionServiceStub(channel)
+        response = stub.GetTransactionInfo(transaction_pb2.TransactionRequest(id=transaction_id))
+        return {
+            "id": response.id,
+            "name": response.name,
+            "email": response.email
+        }
