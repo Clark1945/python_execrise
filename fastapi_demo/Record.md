@@ -22,7 +22,7 @@
 - 分頁 ✅
 - (RPC)gRPC ✅
 - (RPC)GraphQL ✅
-- WebSocket API
+- WebSocket API ✅
 
 
 ## GPT建議學習項目

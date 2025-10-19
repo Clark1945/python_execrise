@@ -6,7 +6,8 @@ from bson import ObjectId
 from fastapi import FastAPI, Depends, HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from starlette.responses import StreamingResponse
+from starlette.responses import StreamingResponse, HTMLResponse
+from starlette.websockets import WebSocket
 from strawberry.fastapi import GraphQLRouter
 import strawberry
 
@@ -112,3 +113,52 @@ def get_transaction(transaction_id: int):
             "name": response.name,
             "email": response.email
         }
+
+
+# 一個簡單的 HTML 客戶端（可直接用來測試）
+html = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FastAPI WebSocket Demo</title>
+    </head>
+    <body>
+        <h1>🛰️ WebSocket Echo Test</h1>
+        <input id="msgInput" type="text" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+        <ul id="messages"></ul>
+        <script>
+            var ws = new WebSocket("ws://localhost:8000/ws");
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages');
+                var li = document.createElement('li');
+                li.textContent = 'Server: ' + event.data;
+                messages.appendChild(li);
+            };
+            function sendMessage() {
+                var input = document.getElementById("msgInput");
+                ws.send(input.value);
+                input.value = '';
+            }
+        </script>
+    </body>
+</html>
+"""
+
+@app.get("/")
+async def get():
+    return HTMLResponse(html)
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    # 接受連線
+    await websocket.accept()
+    await websocket.send_text("Connected to FastAPI WebSocket 🚀")
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(f"📩 Received: {data}")
+            await websocket.send_text(f"Echo: {data}")
+    except Exception as e:
+        print("❌ Connection closed:", e)
