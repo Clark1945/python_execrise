@@ -21,7 +21,7 @@
 - 檔案下載 API ✅
 - 分頁 ✅
 - (RPC)gRPC ✅
-- (RPC)GraphQL
+- (RPC)GraphQL ✅
 - WebSocket API
 
 

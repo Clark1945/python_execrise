@@ -7,12 +7,15 @@ from fastapi import FastAPI, Depends, HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette.responses import StreamingResponse
+from strawberry.fastapi import GraphQLRouter
+import strawberry
 
 from . import models, transaction_pb2_grpc, transaction_pb2
 from .auth import create_access_token
 from .config import settings
 from .middleware.api_logger import APILoggingMiddleware
 from .minio import s3_client
+from .models import Query, Mutation
 from .mongodb import api_call_log
 from .postgre import engine, verify_password, get_db
 from .routers import users
@@ -28,6 +31,14 @@ app.include_router(users.router)
 # 加入 api_call_log的middleware
 app.add_middleware(APILoggingMiddleware)
 
+# 建立 schema
+schema = strawberry.Schema(query=Query, mutation=Mutation)
+
+# 建立 GraphQL Router
+graphql_app = GraphQLRouter(schema)
+
+# 掛載 /graphql
+app.include_router(graphql_app, prefix="/graphql")
 
 @app.post("/token")
 def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
