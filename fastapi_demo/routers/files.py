@@ -1,12 +1,15 @@
 import io
+import logging
 
-from fastapi import APIRouter, UploadFile, HTTPException
+from botocore.exceptions import ClientError
+from fastapi import APIRouter, HTTPException, UploadFile
 from starlette.responses import StreamingResponse
 
-from fastapi_demo.config import settings
-from fastapi_demo.minio import s3_client
+from ..config import settings
+from ..minio import s3_client
 
-router = APIRouter(prefix="/files", tags=["File"])
+router = APIRouter(prefix="/files", tags=["Files"])
+
 
 # 上傳檔案
 @router.post("/upload")
@@ -14,8 +17,9 @@ async def upload_file(file: UploadFile):
     try:
         s3_client.upload_fileobj(file.file, settings.BUCKET_NAME, file.filename)
         return {"file_name": file.filename, "bucket": settings.BUCKET_NAME}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except ClientError as e:
+        logging.error(e)
+        raise HTTPException(status_code=500, detail="Failed to upload file to S3")
 
 
 # ---------------------------
@@ -34,5 +38,10 @@ async def download_file(file_name: str):
         # StreamingResponse is a FastAPI response type that streams content to the client instead of loading it all at once.
         return StreamingResponse(file_obj, media_type="application/octet-stream",
                                  headers={"Content-Disposition": f"attachment; filename={file_name}"})
-    except Exception as e:
-        raise HTTPException(status_code=404, detail="File not found")
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchKey':
+            raise HTTPException(status_code=404, detail=f"File '{file_name}' not found in bucket '{settings.BUCKET_NAME}'")
+        else:
+            # For other S3 errors (permissions, etc.), log the error and return a 500
+            logging.error(f"An unexpected S3 error occurred: {e}")
+            raise HTTPException(status_code=500, detail="An internal error occurred while trying to download the file.")
