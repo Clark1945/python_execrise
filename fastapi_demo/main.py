@@ -1,17 +1,27 @@
+import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 import strawberry
 
-from . import models
 from .middleware.api_logger import APILoggingMiddleware
 from .models import Query, Mutation
-from .postgre import engine
+from .postgre import engine, Base
 from .routers import users, tokens, files, logs, transactions, messages
 
-# 初始化資料庫表格
-models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all) # 初始化資料庫表格
+    yield
+    # shutdown 可以在這裡做清理工作
+    print("fastapi app shutdown")
+
+app = FastAPI(lifespan=lifespan)
 
 # 加入 api_call_log的middleware
 app.add_middleware(APILoggingMiddleware)
