@@ -7,14 +7,18 @@ router = APIRouter(prefix="/logs", tags=["Logs"])
 
 # Range-Based Pagination Api Call Log
 @router.get("/logs")
-def get_logs(limit: int = 10, last_id: str = None):
+async def get_logs(limit: int = 10, last_id: str = None):
     query = {}
     if last_id:
         query["_id"] = {"$lt": ObjectId(last_id)}
-
-    logs = list(api_call_log.find(query)
-                .sort("_id", -1)
-                .limit(limit))
+    cursor = (
+        api_call_log.find(query)
+        .sort("_id", -1)
+        .limit(limit)
+    )
+    logs = []
+    async for doc in cursor:
+        logs.append(doc)
     for log in logs:
         log["_id"] = str(log["_id"])
     return {

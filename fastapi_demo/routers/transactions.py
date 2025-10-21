@@ -1,5 +1,5 @@
 import grpc
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from fastapi_demo import transaction_pb2_grpc, transaction_pb2
 
@@ -14,9 +14,12 @@ def get_transaction(transaction_id: int):
         # 使用由 protoc 生成的 gRPC client 類別 TransactionServiceStub。
         # stub 是一個本地的 client 物件，用來呼叫遠端 gRPC 服務的方法（像 RPC 的 proxy）。
         stub = transaction_pb2_grpc.TransactionServiceStub(channel)
-        response = stub.GetTransactionInfo(transaction_pb2.TransactionRequest(id=transaction_id))
-        return {
-            "id": response.id,
-            "name": response.name,
-            "email": response.email
-        }
+        try:
+            response = stub.GetTransactionInfo(transaction_pb2.TransactionRequest(id=transaction_id))
+            return {
+                "id": response.id,
+                "name": response.name,
+                "email": response.email
+            }
+        except grpc.RpcError as e:
+            raise HTTPException(status_code=500, detail=f"gRPC error occurred: {e.details()}")
