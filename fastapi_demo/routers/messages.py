@@ -17,7 +17,7 @@ html = """
         <button onclick="sendMessage()">Send</button>
         <ul id="messages"></ul>
         <script>
-            var ws = new WebSocket("ws://localhost:8000/ws");
+            var ws = new WebSocket("ws://localhost:8000/messages/ws");
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages');
                 var li = document.createElement('li');
